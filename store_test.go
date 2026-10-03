@@ -16,7 +16,7 @@ func TestGetOrCreateConcorrente(t *testing.T) {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			code, err := s.GetOrCreate("https://Example.com:443/a")
+			code, _, err := s.GetOrCreate("https://Example.com:443/a")
 
 			if err != nil {
 				t.Errorf("erro: %v", err)

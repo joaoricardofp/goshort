@@ -32,18 +32,18 @@ func encodeCode(n int) string {
 	return s
 }
 
-func (s *Store) GetOrCreate(rawURL string) (string, error) {
+func (s *Store) GetOrCreate(rawURL string) (string, bool, error) {
 	normalized, err := normalizeURL(rawURL)
 
 	if err != nil {
-		return "", err
+		return "", false, err
 	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	if code, ok := s.urlToCode[normalized]; ok {
-		return code, nil
+		return code, false, nil
 	}
 
 	var code string
@@ -60,7 +60,7 @@ func (s *Store) GetOrCreate(rawURL string) (string, error) {
 	s.urlToCode[normalized] = code
 	s.codeToURL[code] = normalized
 
-	return code, nil
+	return code, true, nil
 }
 
 func (s *Store) Lookup(code string) (string, bool) {
